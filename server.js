@@ -41,9 +41,11 @@ app.use(function (req, res, next) {
   res.status(404).type("text").send("Not Found");
 });
 
+const PORT = process.env.PORT || 3000;
+
 //Start our server and tests!
-app.listen(process.env.PORT || 3000, function () {
-  console.log("Listening on port " + process.env.PORT);
+app.listen(PORT, function () {
+  console.log(`Listening on port ${PORT}...`);
   if (process.env.NODE_ENV === "test") {
     console.log("Running Tests...");
     setTimeout(function () {
