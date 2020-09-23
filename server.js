@@ -1,17 +1,20 @@
 "use strict";
 require("dotenv").config();
-
-var express = require("express");
-var bodyParser = require("body-parser");
-var cors = require("cors");
-
-var apiRoutes = require("./routes/api.js");
-var fccTestingRoutes = require("./routes/fcctesting.js");
-var runner = require("./test-runner");
-
 require("./services/DatabaseService");
 
-var app = express();
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+const apiRoutes = require("./routes/api.js");
+const fccTestingRoutes = require("./routes/fcctesting.js");
+const runner = require("./test-runner");
+const mongoose = require("mongoose");
+const makeIssuesService = require("./services/IssuesService.js");
+
+const IssuesService = makeIssuesService(mongoose);
+
+const app = express();
 
 app.use("/public", express.static(process.cwd() + "/public"));
 
@@ -34,7 +37,7 @@ app.route("/").get(function (req, res) {
 fccTestingRoutes(app);
 
 //Routing for API
-apiRoutes(app);
+apiRoutes(app, IssuesService);
 
 //404 Not Found Middleware
 app.use(function (req, res, next) {
@@ -52,7 +55,7 @@ app.listen(PORT, function () {
       try {
         runner.run();
       } catch (e) {
-        var error = e;
+        const error = e;
         console.log("Tests are not valid:");
         console.log(error);
       }
