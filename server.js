@@ -9,10 +9,10 @@ const cors = require("cors");
 const apiRoutes = require("./routes/api.js");
 const fccTestingRoutes = require("./routes/fcctesting.js");
 const runner = require("./test-runner");
-const mongoose = require("mongoose");
-const makeIssuesService = require("./services/IssuesService.js");
 
-const IssuesService = makeIssuesService(mongoose);
+const makeIssuesService = require("./services/IssuesService.js");
+const IssueModel = require("./models/IssueModel");
+const IssuesService = makeIssuesService({ IssueModel });
 
 const app = express();
 

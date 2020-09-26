@@ -10,6 +10,11 @@
 
 var expect = require("chai").expect;
 
+/**
+ *
+ * @param {import('../server')} app
+ * @param {import('../services/IssuesService')} issuesService
+ */
 module.exports = function (app, issuesService) {
   app
     .route("/api/issues/:project")
@@ -18,8 +23,10 @@ module.exports = function (app, issuesService) {
       var project = req.params.project;
     })
 
-    .post(function (req, res) {
-      var project = req.params.project;
+    .post(async (req, res) => {
+      const project = req.body;
+      const newIssue = await issuesService.addIssue(project);
+      res.json(newIssue);
     })
 
     .put(function (req, res) {

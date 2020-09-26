@@ -1,4 +1,4 @@
-export const required = (input = undefined) => {
+const required = (input = undefined) => {
   if (typeof input !== "string") {
     throw Error("Input required");
   }
@@ -6,7 +6,11 @@ export const required = (input = undefined) => {
   return input;
 };
 
-export const optional = (input) => {
+/**
+ *
+ * @returns {undefined | string} input
+ */
+const optional = (input) => {
   if (typeof input === "undefined") {
     return undefined;
   }
@@ -16,4 +20,9 @@ export const optional = (input) => {
   }
 
   throw Error("Input is not string or undefined");
+};
+
+module.exports = {
+  optional,
+  required,
 };
