@@ -25,8 +25,13 @@ module.exports = function (app, issuesService) {
 
     .post(async (req, res) => {
       const project = req.body;
-      const newIssue = await issuesService.addIssue(project);
-      res.json(newIssue);
+      try {
+        const newIssue = await issuesService.addIssue(project);
+        res.json(newIssue);
+      } catch {
+        res.status(400);
+        res.json({ error: "bad request" });
+      }
     })
 
     .put(function (req, res) {

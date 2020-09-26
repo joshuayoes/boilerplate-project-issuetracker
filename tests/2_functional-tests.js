@@ -1,22 +1,32 @@
 /*
-*
-*
-*       FILL IN EACH FUNCTIONAL TEST BELOW COMPLETELY
-*       -----[Keep the tests in the same order!]-----
-*       (if additional are added, keep them at the very end!)
-*/
+ *
+ *
+ *       FILL IN EACH FUNCTIONAL TEST BELOW COMPLETELY
+ *       -----[Keep the tests in the same order!]-----
+ *       (if additional are added, keep them at the very end!)
+ */
 
 var chaiHttp = require("chai-http");
 var chai = require("chai");
 var assert = chai.assert;
 var server = require("../server");
+const { expect } = require("chai");
 
 chai.use(chaiHttp);
 
 suite("Functional Tests", function () {
   suite("POST /api/issues/{project} => object with issue data", function () {
     test("Every field filled in", function (done) {
-      chai.request(server)
+      const request = {
+        issue_title: "Title",
+        issue_text: "text",
+        created_by: "Functional Test - Every field filled in",
+        assigned_to: "Chai and Mocha",
+        status_text: "In QA",
+      };
+
+      chai
+        .request(server)
         .post("/api/issues/test")
         .send({
           issue_title: "Title",
@@ -26,37 +36,49 @@ suite("Functional Tests", function () {
           status_text: "In QA",
         })
         .end(function (err, res) {
-          assert.equal(res.status, 200);
+          assert.equal(
+            res.status,
+            200,
+            `Status code is ${res.status}, not 200`
+          );
 
-          //fill me in too!
+          const reqEntries = Object.entries(request);
+          reqEntries.forEach(([key, value]) => {
+            assert.propertyVal(
+              res.body,
+              key,
+              value,
+              `${key} is not expected value. Actual value: ${value}`
+            );
+          });
+
+          assert.isString(res.body._id);
+          assert.isString(res.body.created_on);
+          assert.isString(res.body.updated_on);
 
           done();
         });
     });
 
-    test("Required fields filled in", function (done) {
-    });
+    test("Required fields filled in", function (done) {});
 
-    test("Missing required fields", function (done) {
-    });
+    test("Missing required fields", function (done) {});
   });
 
   suite("PUT /api/issues/{project} => text", function () {
-    test("No body", function (done) {
-    });
+    test("No body", function (done) {});
 
-    test("One field to update", function (done) {
-    });
+    test("One field to update", function (done) {});
 
-    test("Multiple fields to update", function (done) {
-    });
+    test("Multiple fields to update", function (done) {});
   });
 
   suite(
     "GET /api/issues/{project} => Array of objects with issue data",
     function () {
       test("No filter", function (done) {
-        chai.request(server)
+        chai
+          .request(server)
           .get("/api/issues/test")
           .query({})
           .end(function (err, res) {
@@ -75,21 +97,15 @@ suite("Functional Tests", function () {
           });
       });
 
-      test("One filter", function (done) {
-      });
+      test("One filter", function (done) {});
 
-      test("Multiple filters (test for multiple fields you know will be in the db for a return)", function (
-        done,
-      ) {
-      });
-    },
+      test("Multiple filters (test for multiple fields you know will be in the db for a return)", function (done) {});
+    }
   );
 
   suite("DELETE /api/issues/{project} => text", function () {
-    test("No _id", function (done) {
-    });
+    test("No _id", function (done) {});
 
-    test("Valid _id", function (done) {
-    });
+    test("Valid _id", function (done) {});
   });
 });
